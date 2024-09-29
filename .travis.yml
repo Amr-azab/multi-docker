@@ -10,7 +10,15 @@ script:
 
 language: generic
 
-after_success: -docker build -t amr/multi-client ./client
+after_success: 
+  -docker build -t amr/multi-client ./client
   -docker build -t amr/multi-nginx ./nginx
   -docker build -t amr/multi-server ./server
   -docker build -t amr/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push amr/multi-client
+  - docker push amr/multi-nginx
+  - docker push amr/multi-server
+  - docker push amr/multi-worker
